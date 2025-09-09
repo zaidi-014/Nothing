@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday, Nida! ✨🎂</title>
+  <meta name="theme-color" content="#8b5cf6" />
+  <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🎈</text></svg>' />
+  <style>
+    :root{
+      --bg1:#0ea5e9; /* sky */
+      --bg2:#8b5cf6; /* violet */
+      --bg3:#ec4899; /* pink */
+      --card: rgba(255,255,255,0.12);
+      --card-border: rgba(255,255,255,0.25);
+      --text:#fff;
+      --accent:#ffd166;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial;
+      overflow:hidden;
+      background: linear-gradient(120deg, var(--bg1), var(--bg2), var(--bg3));
+      background-size: 300% 300%;
+      animation: gradientShift 18s ease infinite;
+    }
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    /* Layered canvases */
+    #stars, #confetti, #fireworks, #cakes{position:fixed; inset:0; pointer-events:none}
+    #stars{z-index:0; opacity:.6}
+    #fireworks{z-index:1}
+    #cakes{z-index:1}
+    #confetti{z-index:2}
+
+    .container{position:relative; z-index:4; min-height:100vh; display:grid; place-items:center; padding:24px}
+    .card{
+      width:min(920px, 96vw);
+      background: var(--card);
+      border:1px solid var(--card-border);
+      backdrop-filter: blur(14px) saturate(120%);
+      border-radius: 28px; padding:clamp(18px,3.5vw,44px);
+      box-shadow: var(--shadow);
+      transform: perspective(900px) rotateX(0) rotateY(0);
+      transition: transform .2s ease;
+    }
+    .title{margin:0 0 8px; font-weight:900; line-height:1.05; font-size:clamp(38px,7vw,72px);
+      background: linear-gradient(90deg,#fff,#ffe082,#fff); -webkit-background-clip:text; background-clip:text; color:transparent;
+      text-shadow: 0 6px 30px rgba(0,0,0,.25);
+    }
+    .subtitle{margin:0; opacity:.95; font-size:clamp(16px,2.8vw,20px)}
+    .row{display:flex; flex-wrap:wrap; gap:12px; margin-top:18px}
+    .btn{appearance:none; border:none; cursor:pointer; padding:12px 16px; border-radius:16px; font-weight:800; font-size:16px;
+      color:#111827; background:#fff; box-shadow: 0 10px 20px rgba(0,0,0,.18); transition: transform .15s ease, box-shadow .2s ease}
+    .btn:hover{transform: translateY(-2px); box-shadow:0 16px 32px rgba(0,0,0,.22)}
+    .btn:active{transform: translateY(0)}
+    .btn.secondary{background:#111827; color:#fff; border:1px solid rgba(255,255,255,.2)}
+    .btn.ghost{background:transparent; color:#fff; border:1px dashed rgba(255,255,255,.4)}
+
+    .wish{margin-top:18px; font-size:clamp(18px,2.6vw,22px); line-height:1.6}
+    .footer{margin-top:16px; opacity:.85; font-size:14px}
+
+    .float{position:fixed; bottom:-80px; font-size:28px; filter: drop-shadow(0 4px 6px rgba(0,0,0,.25)); z-index:1; animation:floatUp linear forwards}
+    @keyframes floatUp{to{transform: translateY(-120vh) rotate(-8deg); opacity:.95}}
+
+    .sound{position:fixed; right:14px; top:14px; z-index:5}
+
+    .gate{position:fixed; inset:0; z-index:6; display:grid; place-items:center; background:rgba(0,0,0,.35); backdrop-filter: blur(8px)}
+    .gate-inner{width:min(560px,92vw); text-align:center; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); padding:24px; border-radius:24px; box-shadow:var(--shadow)}
+    .gate h2{margin:0 0 6px; font-size:clamp(28px,6vw,40px)}
+    .gate p{margin:0 0 12px; font-size:clamp(14px,3.4vw,18px); opacity:.95}
+
+    @media (max-width:480px){ .row{gap:10px} }
+
+    /* Flickering candle flames */
+    .flame {
+      position: absolute;
+      width: 12px;
+      height: 18px;
+      background: radial-gradient(circle, #ffdd55 0%, #ff8800 70%, transparent 100%);
+      border-radius: 50%;
+      top: -22px;
+      animation: flicker 0.15s infinite alternate;
+      filter: blur(1px) drop-shadow(0 0 6px #ff6600);
+    }
+    @keyframes flicker {
+      from { transform: scaleY(0.9) scaleX(1); opacity: 0.85; }
+      to   { transform: scaleY(1.1) scaleX(0.9); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background layers -->
+  <canvas id="stars"></canvas>
+  <canvas id="fireworks"></canvas>
+  <canvas id="cakes"></canvas>
+  <canvas id="confetti"></canvas>
+
+  <!-- Content -->
+  <div class="container">
+    <main class="card" id="card">
+      <h1 class="title"><span id="greeting">Happy Birthday, Nida!</span> 🎂🎉</h1>
+      <p class="subtitle" id="typed"></p>
+
+      <div class="row">
+        <button class="btn" id="btnCelebrate">🎊 Celebrate</button>
+        <button class="btn secondary" id="btnSurprise">🎁 Open Surprise</button>
+        <button class="btn ghost" id="btnFireworks">✨ Fireworks</button>
+      </div>
+
+      <p class="wish" id="wish">Khush reh , Nida ! Allah tjy kamyaab kary..</p>
+      <div class="footer" id="fromText">— From zaid</div>
+    </main>
+  </div>
+
+  <div class="gate-inner">
+    <button class="btn" id="btnStart">Start 🎶</button>
+</div>
+    <audio id="bg-music" preload="auto" loop>
+    <source src="birthday.mp3" type="audio/mp3">
+  </audio>
+  <script>
+    const qs = new URLSearchParams(location.search);
+    const NAME  = (qs.get('name') || 'Fatima').trim();
+    const FROM  = (qs.get('from') || 'Zaidi').trim();
+    const MSG   = qs.get('message');
+
+    const greeting = document.getElementById('greeting');
+    const typed    = document.getElementById('typed');
+    const wish     = document.getElementById('wish');
+    const fromText = document.getElementById('fromText');
+
+    greeting.textContent = `Happy Birthday, Nida !`;
+    if (MSG) wish.textContent = decodeURIComponent(MSG);
+    fromText.textContent = `— From Zaidi `;
+
+    const lines = [
+      `Wishing you joy, Nida !`,
+      'Apna surprise kholo!'
+    ];
+    let li=0, ci=0; typed.classList.add('typed');
+    function type(){
+      const line = lines[li] || '';
+      if (ci <= line.length){ typed.textContent = line.slice(0,ci++); setTimeout(type, 45); }
+      else { setTimeout(()=>{ li++; ci=0; if(li<lines.length) type(); else typed.classList.remove('typed'); }, 1100); }
+    }
+    type();
+
+    const card = document.getElementById('card');
+    card.addEventListener('mousemove', (e)=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width - .5; const y=(e.clientY-r.top)/r.height - .5;
+      card.style.transform = `perspective(900px) rotateX(${(-y*6).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg)`;
+    });
+    card.addEventListener('mouseleave',()=> card.style.transform='perspective(900px) rotateX(0) rotateY(0)');
+
+    const stars = document.getElementById('stars');
+    const sctx = stars.getContext('2d'); let sw, sh, starList=[];
+    function sResize(){ sw=stars.width=innerWidth; sh=stars.height=innerHeight; starList = Array.from({length:120}, ()=>({x:Math.random()*sw, y:Math.random()*sh, z:Math.random()*1, r:Math.random()*1.8+0.2})); }
+    addEventListener('resize', sResize); sResize();
+    (function sLoop(){ requestAnimationFrame(sLoop); sctx.clearRect(0,0,sw,sh); sctx.fillStyle='rgba(255,255,255,.85)';
+      starList.forEach(s=>{ s.y += (0.2 + s.z*0.6); if(s.y>sh) s.y = -2; sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2); sctx.fill(); }); })();
+
+    const confetti = document.getElementById('confetti'); const cctx = confetti.getContext('2d'); let cw,ch, cfId;
+    function cResize(){ cw=confetti.width=innerWidth; ch=confetti.height=innerHeight; }
+    addEventListener('resize', cResize); cResize();
+    const COLORS=['#ffe082','#ff9f1c','#ef476f','#06d6a0','#118ab2','#a78bfa','#fca5a5','#c4b5fd'];
+    function shootConfetti(bursts=5){
+      const P=[]; const TAU=Math.PI*2; let t=0;
+      for(let b=0;b<bursts;b++){
+        const n=~~(40+Math.random()*50); const x=cw*(.15+.7*Math.random()); const y=ch*(.1+.3*Math.random());
+        for(let i=0;i<n;i++) P.push({x,y,vx:Math.cos(Math.random()*TAU)*Math.random()*5,vy:Math.sin(Math.random()*TAU)*Math.random()*5- (2+Math.random()*4),g:.08+.08*Math.random(),s:2+Math.random()*5,a:1,r:Math.random()*TAU,vr:(Math.random()-.5)*.4,col:COLORS[~~(Math.random()*COLORS.length)]});
+      }
+      cancelAnimationFrame(cfId);
+      (function f(){ cfId=requestAnimationFrame(f); cctx.clearRect(0,0,cw,ch); t++;
+        P.forEach(p=>{ p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr; p.a-=0.005; });
+        for(const p of P){ if(p.a<=0) continue; cctx.globalAlpha=Math.max(p.a,0); cctx.save(); cctx.translate(p.x,p.y); cctx.rotate(p.r); cctx.fillStyle=p.col; cctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*1.4); cctx.restore(); }
+        if(t>900) cancelAnimationFrame(cfId);
+      })();
+    }
+
+    const fw = document.getElementById('fireworks'); const fctx = fw.getContext('2d'); let fwW, fwH;
+    function fResize(){ fwW=fw.width=innerWidth; fwH=fw.height=innerHeight; }
+    addEventListener('resize', fResize); fResize();
+    const sparks=[];
+    function boom(x,y){ const N=140; for(let i=0;i<N;i++){ const a=(i/N)*Math.PI*2; const sp= 2+Math.random()*4; sparks.push({x,y,vx:Math.cos(a)*sp, vy:Math.sin(a)*sp, life:120, col:COLORS[~~(Math.random()*COLORS.length)]}); } }
+    (function fwLoop(){ requestAnimationFrame(fwLoop); fctx.clearRect(0,0,fwW,fwH);
+      for(const s of sparks){ s.x+=s.vx; s.y+=s.vy; s.vy+=0.02; s.life--; fctx.globalAlpha = Math.max(0, s.life/120); fctx.fillStyle=s.col; fctx.fillRect(s.x,s.y,2,2);} 
+      for(let i=sparks.length-1;i>=0;i--) if(sparks[i].life<=0) sparks.splice(i,1);
+    })();
+
+    const cakes = document.getElementById('cakes'); const ckctx = cakes.getContext('2d'); let ckW, ckH;
+    function ckResize(){ ckW=cakes.width=innerWidth; ckH=cakes.height=innerHeight; }
+    addEventListener('resize', ckResize); ckResize();
+    let cakeObjs=[];
+    function popCake(){
+      cakeObjs.push({x:ckW/2,y:ckH*0.6,scale:0.5,life:200});
+    }
+    (function cakeLoop(){
+      requestAnimationFrame(cakeLoop);
+      ckctx.clearRect(0,0,ckW,ckH);
+      cakeObjs.forEach(c=>{
+        c.life--;
+        if(c.scale<1) c.scale+=0.02;
+        ckctx.save();
+        ckctx.translate(c.x,c.y);
+        ckctx.scale(c.scale,c.scale);
+        ckctx.font='100px serif';
+        ckctx.textAlign='center';
+        ckctx.fillText('🎂',0,0);
+        ckctx.restore();
+      });
+      cakeObjs=cakeObjs.filter(c=>c.life>0);
+    })();
+
+    function spawnFloat(){ const e=document.createElement('span'); e.className='float'; e.textContent=Math.random()<.5?'🎈':'💖'; e.style.left=(Math.random()*100)+'vw'; e.style.fontSize=(24+Math.random()*24)+'px'; e.style.animationDuration=(10+Math.random()*10)+'s'; document.body.appendChild(e); setTimeout(()=>e.remove(),20000); }
+    setInterval(spawnFloat, 900); for(let i=0;i<8;i++) setTimeout(spawnFloat, i*350);
+
+    document.getElementById('btnCelebrate').addEventListener('click', ()=>{
+      shootConfetti(7);
+      popCake();
+    });
+
+ document.getElementById('btnFireworks').addEventListener('click', ()=> {
+  boom(innerWidth*(0.2+Math.random()*0.6), innerHeight*(0.3+Math.random()*0.3));
+   shootConfetti(7);
+     
+});
+
+    document.getElementById('btnSurprise').addEventListener('click', ()=>{
+      let box = document.getElementById('surpriseBox');
+      if(!box){
+        box = document.createElement('section'); box.id='surpriseBox'; box.style.marginTop='18px'; box.style.padding='16px'; box.style.borderRadius='16px'; box.style.background='rgba(255,255,255,.08)'; box.style.border='1px dashed rgba(255,255,255,.35)';
+        box.innerHTML = `<h3 style="margin:0 0 8px">✨ Ab yahan sy sirf duayn dy sakta hoon . Allah Tery liy meri saari duayn qabool kary. Jesi khush rehti ha hamesha aesi hi reh.</h3><p>Hamesha apni marzi karo,  <strong>Nida</strong> — kabhi kisi ko personality change mt krny dena apni!  </p>`;
+        card.appendChild(box);
+      } else { box.remove(); }
+      shootConfetti(4);
+    });
+    function popCake(){
+  const x = innerWidth/2;
+  const y = innerHeight*0.6;
+
+  // Draw cake emoji on fireworks canvas
+  fctx.save();
+  fctx.font = "500px serif";
+  fctx.textAlign = "center";
+  fctx.fillText("🎂", x, y);
+
+  // Animate fade out
+  let alpha = 1;
+  function fade(){
+    fctx.clearRect(x-60,y-120,120,140); // clear old
+    fctx.globalAlpha = alpha;
+    fctx.fillText("🎂", x, y);
+    alpha -= 0.02;
+    if(alpha > 0) requestAnimationFrame(fade);
+    else fctx.restore();
+  }
+  fade();
+}
+
+
+    const audioEl  = document.getElementById('bg-music');
+    const gate_innerEl   = document.getElementById('gate');
+    const btnStartEl = document.getElementById('btnStart');
+    const toggleEl = document.getElementById('toggleSound');
+
+    async function safePlay(){
+      try{
+        audioEl.muted = false;
+        audioEl.volume = 1;
+        await audioEl.play();
+        toggleEl.textContent = '🔊 Sound';
+        return true;
+      }catch(err){
+        return false;
+      }
+    }
+
+    btnStartEl.addEventListener('click', async ()=>{
+      const ok = await safePlay();
+      gateEl.style.display='none';
+      shootConfetti(7); 
+      boom(innerWidth*0.5, innerHeight*0.58);
+    }, {once:true});
+
+    addEventListener('pointerdown', async function once(){ 
+      await safePlay(); 
+      removeEventListener('pointerdown', once); 
+    }, {once:true});
+
+    toggleEl.addEventListener('click', async ()=>{
+      if(audioEl.paused){ 
+        const ok = await safePlay(); 
+        if(!ok) alert('Unable to start audio automatically.');
+      } else { 
+        audioEl.pause(); 
+        toggleEl.textContent='🔈 Muted'; 
+      }
+    });
+
+    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) audioEl.pause(); });
+  </script>
+</body>
+</html>
